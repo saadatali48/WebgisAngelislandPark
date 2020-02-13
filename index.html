@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="Author" content="Saadat Ali">
+		<title>Angel Island State Park</title>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+			integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="crossorigin=""
+			/>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+			integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="crossorigin=""></script>
+		<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="crossorigin="anonymous"></script>
+		<link rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css"
+			/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
+			charset="utf-8"></script>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+		<script
+			src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
+		<div id="mapid"></div>
+		<div id="parkdetails">
+			<span onclick="document.getElementById('parkdetails').style.display='none'"
+				class="w3-button w3-display-topright">&times;</span><br>
+			<p> This Application will help you navigate <a
+					href="http://www.parks.ca.gov/?page_id=468" style="color: blue;"
+					target="_blank">Angel Island Park</a>
+				Angel Island State Park, the largest natural island in the San Francisco
+				Bay,offers some of the best views of the surrounding Bay Area. With great
+				hiking
+				trails and many other recreational opportunities readily available, Angel
+				Island is truly a
+				hidden gem in the midst of the urban Bay Area.
+				Angel Island is truly a walk through time! Beginning with the earliest
+				inhabitants,the Coast Miwok, Angel Island was a seasonal hunting and
+				gathering location
+				for the local native tribes, a safe refuge and supply stop for Spanish
+				explorers like Juan
+				Manuel de Ayala, one of the first to map the San Francisco Bay.</p>
+		</div>
+		<div id="nearestpoint">
+			<p> Click on Map to find the nearest facility</p>
+			<div class="btn-group">
+				<button id="restroom-btn" onclick="FindNearestRestRoom()">Restroom</button>
+				<button id="picnic-sites-btn" onclick="FindNearestPicnicSite()">Picnic Sites</button>
+				<button id="historic-sites-btn" onclick="FindNearestHistoricSite()">Historic
+					Sites</button>
+				<button id="camp-sites-btn" onclick="FindNearestCampSite()">Camp Sites</button>
+				<button id="beaches-btn" onclick="FindNearestBeach()">Beaches</button>
+				<button id="drinking-water-btn" onclick="FindNearestDrinkingWater()">Drinking
+					Water</button>
+			</div>
+		</div>
+		<div id="clickonmap">
+			<span onclick="document.getElementById('clickonmap').style.display='none'"
+				class="w3-button w3-display-topright">&times;</span><br>
+			<p> Please Click on map to select a location </p>
+		</div>
+		<div id="showpopupmessage">
+			<div id="textinfo">
+			</div>
+			<div id="closebtn">
+				<button class="w3-btn" onclick="RemoveNearestPoint()">Close</button>
+			</div>
+		</div>
+		<div id="commentsection">
+			<div class="commentsectionheader">Click on map to add comment about any amenity
+			</div>
+			<br>
+			<div class="dropdowns">
+					<form class="formclass">
+							Type: <select id="type">
+								<option disabled selected value> comment type </option>
+								<option value="1">Suggestion</option>
+								<option value="2">General feedback</option>
+								<option value="3">Hazard</option>
+							</select>
+							Amenity: <select id="entity">
+								<option disabled selected value> select facility type </option>
+								<option value="1">Picnic Sites</option>
+								<option value="2">Historical Sites</option>
+								<option value="3">Drinking Water</option>
+								<option value="4">Camping Site</option>
+								<option value="5">Beaches</option>
+								<option value="6">Restrooms</option>
+							</select>
+							&nbsp;Comment: <input type="text" id="commenttext">
+							&nbsp;Email: <input type="text" id="email" placeholder="Please enter your email">
+						</form>
+						<button class="w3-button" type="button" id="addcommentbtn" onclick="SubmitComment()">Submit</button>
+						<button class="w3-button" type="button" id="cancelcommentbtn" onclick="CancelComment()">Cancel</button>
+			</div>
+		</div>
+		<div id = "commentspopup">
+				<span onclick="document.getElementById('commentspopup').style.display='none'"
+				class="w3-button w3-display-topright">&times;</span><br>
+			<p id="popuptext"> Please click on map to insert comment </p>
+		</div>
+		<div id="getcomments">
+				<p>&nbsp;Enter your password: </p><input type="password" id="password">
+				<button class="w3-button" type="button" id="addpasswordbtn" onclick="SubmitPassword()">Submit</button>
+				<button class="w3-button" type="button" id="cancelpasswordbtn" onclick="CancelPassword()">Cancel</button>
+		</div>
+		<div id="removecomment">
+			<p>Are you finished with this comment</p>
+			<button id="yesbtn" class="w3-button" onclick="YesButton()">Yes</button>
+			<button id="nobtn" class="w3-button" onclick="NoButton()">No</button>
+		</div>
+
+
+		<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+		<script src="js/index.js"></script>
+	</body>
+</html>
